@@ -42,9 +42,8 @@ ParseObject *create_parsed_object(Token *token) {
 
 void eat_token(Token **tokens, int *cursor, char *token_type) {
   Token *current_token = tokens[(*cursor)];
-  // printf("current %s \teat_token type %s\n", current_token->type, token_type);
   if (strcmp(current_token->type, token_type) == 0) {
-    (*cursor)++;
+    (*cursor) += 1;
   } else {
     printf("SyntaxError: Expected token of type %s but instead got %s\n", token_type, current_token->type);
     exit(0);
@@ -65,36 +64,68 @@ ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
 
 ParseObject* parse_term(Token **tokens, int num_tokens, int *cursor) {
   ParseObject *lhs = parse_factor(tokens, num_tokens, cursor);
+  if ((*cursor) >= num_tokens) {
+    return lhs;
+  };
+  Token *current_token = tokens[(*cursor)];
+  while (
+    strcmp(current_token->type, "DIVIDE") == 0 ||
+    strcmp(current_token->type, "MULTIPLY") == 0
+  ) {
+    
+    if (strcmp(current_token->type, "DIVIDE") == 0) {
+      eat_token(tokens, cursor, "DIVIDE");
+    } else {
+      eat_token(tokens, cursor, "MULTIPLY");
+    }
+    
+    ParseObject *rhs = parse_factor(tokens, num_tokens, cursor);
+    ParseObject *old_lhs = lhs;
+    char *operator = current_token->value;
+    lhs = malloc(sizeof(ParseObject));
+    lhs->operator = operator;
+    lhs->lhs = old_lhs;
+    lhs->type = "BinaryOperator";
+    lhs->rhs = rhs;
+    
+    if ((*cursor) >= num_tokens) {
+      break;
+    } else {
+      current_token = tokens[(*cursor)];
+    }
+  }  
   return lhs;
 }
 
 ParseObject* parse_expression(Token **tokens, int num_tokens, int *cursor) {
   ParseObject *lhs = parse_term(tokens, num_tokens, cursor);
+  if ((*cursor) >= num_tokens) {
+    return lhs;
+  };
   Token *current_token = tokens[(*cursor)];
   while (
     strcmp(current_token->type, "PLUS") == 0 ||
     strcmp(current_token->type, "MINUS") == 0
   ) {
-    char *operator = current_token->value;
     if (strcmp(current_token->type, "PLUS") == 0) {
       eat_token(tokens, cursor, "PLUS");
-    } 
-    
-    if (strcmp(current_token->type, "MINUS") == 0) {
+    } else {
       eat_token(tokens, cursor, "MINUS");
     }
     
     ParseObject *rhs = parse_term(tokens, num_tokens, cursor);
     ParseObject *old_lhs = lhs;
+    char *operator = current_token->value;
     lhs = malloc(sizeof(ParseObject));
+    lhs->operator = operator;
     lhs->lhs = old_lhs;
     lhs->type = "BinaryOperator";
-    lhs->operator = operator;
     lhs->rhs = rhs;
     if ((*cursor) >= num_tokens) {
       break;
-    };
-    current_token = tokens[(*cursor)];
+    } else {
+      current_token = tokens[(*cursor)];
+    }
   }
   return lhs;
 }
@@ -116,6 +147,10 @@ int evaluate(ParseObject *object) {
     return lhs + rhs;
   } else if (strcmp(object->operator, "-") == 0) {
     return lhs - rhs;
+  } else if (strcmp(object->operator, "*") == 0) {
+    return lhs * rhs;
+  } else if (strcmp(object->operator, "/") == 0) {
+    return lhs / rhs;
   } else {
     return -1;
   }
@@ -123,11 +158,10 @@ int evaluate(ParseObject *object) {
 
 int main() {
   int num_tokens = 0;
-  char *stream = "1 + 3 - 4 + 100 - 99";
+  // char *stream = "1 + 3 - 4 + 100 - 99";
+  char *stream = "9 * 9 - 12";
   int stream_length = strlen(stream);
   Token **tokens = lexer(stream, stream_length, &num_tokens);
-  // print_tokens(tokens, num_tokens);
-
   ParseObject *ast = parse(tokens, num_tokens);
   int evaluated_value = evaluate(ast);
   printf("evaluated_value: %d\n", evaluated_value);
