@@ -36,20 +36,20 @@ int main() {
   return 0;
 }
 
-int evaluate(ParseObject *object) {
-  if (strcmp(object->type, "NumericLiteral") == 0) {
-    return object->value;
+int evaluate(ParseObject *ast) {
+  if (strcmp(ast->type, "NumericLiteral") == 0) {
+    return ast->value;
   }
 
-  int lhs = evaluate(object->lhs);
-  int rhs = evaluate(object->rhs);
-  if (strcmp(object->operator, "+") == 0) {
+  int lhs = evaluate(ast->lhs);
+  int rhs = evaluate(ast->rhs);
+  if (strcmp(ast->operator, "+") == 0) {
     return lhs + rhs;
-  } else if (strcmp(object->operator, "-") == 0) {
+  } else if (strcmp(ast->operator, "-") == 0) {
     return lhs - rhs;
-  } else if (strcmp(object->operator, "*") == 0) {
+  } else if (strcmp(ast->operator, "*") == 0) {
     return lhs * rhs;
-  } else if (strcmp(object->operator, "/") == 0) {
+  } else if (strcmp(ast->operator, "/") == 0) {
     return lhs / rhs;
   } else {
     return -1;
