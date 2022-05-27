@@ -5,7 +5,7 @@
 
 ParseObject* create_parsed_object(Token *token) {
   ParseObject *p = malloc(sizeof(ParseObject));
-  p->value = atoi(token->value);
+  p->value = atof(token->value);
   p->type = "NumericLiteral";
   return p;
 }
@@ -22,9 +22,9 @@ void eat_token(Token **tokens, int *cursor, char *token_type) {
 
 ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
   Token *current_token = tokens[(*cursor)];
-  if (strcmp(current_token->type, "INTEGER") == 0) {
+  if (strcmp(current_token->type, "NUMBER") == 0) {
     ParseObject *literal = create_parsed_object(current_token);
-    eat_token(tokens, cursor, "INTEGER");
+    eat_token(tokens, cursor, "NUMBER");
     return literal;
   } 
 

@@ -92,7 +92,7 @@ Token **lexer(char *stream, int stream_length, int *size) {
         if (is_numeric(c)) {
           char *str_num = malloc(sizeof(char));
           int buffer_idx = 0;
-          while (is_numeric(c) & (cursor < stream_length)) {
+          while ((is_numeric(c) || c == '.') & (cursor < stream_length)) {
             str_num[buffer_idx] = c;
             cursor++;
             buffer_idx++;
@@ -101,7 +101,7 @@ Token **lexer(char *stream, int stream_length, int *size) {
           }
 
           {
-            Token* t = create_token("INTEGER", str_num);
+            Token* t = create_token("NUMBER", str_num);
             num_tokens++;
             tokens = realloc(tokens, num_tokens * sizeof(Token *));
             tokens[num_tokens - 1] = t;

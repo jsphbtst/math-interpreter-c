@@ -6,7 +6,7 @@
 
 #define BUFFER_SIZE 4096
 
-int evaluate(ParseObject *object);
+double evaluate(ParseObject *object);
 
 int main() {
   char message[BUFFER_SIZE];
@@ -27,8 +27,8 @@ int main() {
     int size = 0;
     Token **tokens = lexer(stream, stream_length, &size);
     ParseObject *ast = parse(tokens, size);
-    int evaluated_value = evaluate(ast);
-    printf("%d\n", evaluated_value);
+    double evaluated_value = evaluate(ast);
+    printf("%.6g\n", evaluated_value);
     free(stream);
     destroy_tokens(tokens, size);
     destroy_ast(ast);
@@ -36,13 +36,13 @@ int main() {
   return 0;
 }
 
-int evaluate(ParseObject *ast) {
+double evaluate(ParseObject *ast) {
   if (strcmp(ast->type, "NumericLiteral") == 0) {
     return ast->value;
   }
 
-  int lhs = evaluate(ast->lhs);
-  int rhs = evaluate(ast->rhs);
+  double lhs = evaluate(ast->lhs);
+  double rhs = evaluate(ast->rhs);
   if (strcmp(ast->operator, "+") == 0) {
     return lhs + rhs;
   } else if (strcmp(ast->operator, "-") == 0) {

@@ -1,7 +1,7 @@
 #include "lexer.h"
 
 typedef struct ParseObject {
-  int value;
+  double value;
   char *type;
   char *operator;
   struct ParseObject *lhs;
