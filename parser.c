@@ -112,3 +112,13 @@ ParseObject* parse(Token **tokens, int num_tokens) {
   ParseObject *result = parse_expression(tokens, num_tokens, &cursor);
   return result;
 }
+
+void destroy_ast(ParseObject *ast) {
+  if (strcmp(ast->type, "NumericLiteral") == 0) {
+    free(ast);
+    return;
+  }
+
+  destroy_ast(ast->lhs);
+  destroy_ast(ast->rhs);
+}

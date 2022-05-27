@@ -14,3 +14,4 @@ ParseObject* parse_term(Token **tokens, int num_tokens, int *cursor);
 ParseObject* parse_expression(Token **tokens, int num_tokens, int *cursor);
 ParseObject* parse(Token **tokens, int num_tokens);
 void eat_token(Token **tokens, int *cursor, char *token_type);
+void destroy_ast(ParseObject *ast);

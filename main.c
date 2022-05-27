@@ -29,9 +29,9 @@ int main() {
     ParseObject *ast = parse(tokens, size);
     int evaluated_value = evaluate(ast);
     printf("%d\n", evaluated_value);
-    // @TODO: free memories here
     free(stream);
     destroy_tokens(tokens, size);
+    destroy_ast(ast);
   }
   return 0;
 }
