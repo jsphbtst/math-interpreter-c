@@ -25,6 +25,13 @@ void destroy_token(Token *token) {
   free(token);
 }
 
+void destroy_tokens(Token **tokens, int num_tokens) {
+  for (int i = 0; i < num_tokens; i++) {
+    free(tokens[i]);
+  }
+  free(tokens);
+}
+
 Token **lexer(char *stream, int stream_length, int *size) {
   int num_tokens = 0;
   Token **tokens = malloc(num_tokens * sizeof(Token *));;
