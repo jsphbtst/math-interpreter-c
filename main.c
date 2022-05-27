@@ -6,25 +6,7 @@
 
 #define BUFFER_SIZE 4096
 
-int evaluate(ParseObject *object) {
-  if (strcmp(object->type, "NumericLiteral") == 0) {
-    return object->value;
-  }
-
-  int lhs = evaluate(object->lhs);
-  int rhs = evaluate(object->rhs);
-  if (strcmp(object->operator, "+") == 0) {
-    return lhs + rhs;
-  } else if (strcmp(object->operator, "-") == 0) {
-    return lhs - rhs;
-  } else if (strcmp(object->operator, "*") == 0) {
-    return lhs * rhs;
-  } else if (strcmp(object->operator, "/") == 0) {
-    return lhs / rhs;
-  } else {
-    return -1;
-  }
-}
+int evaluate(ParseObject *object);
 
 int main() {
   char message[BUFFER_SIZE];
@@ -50,4 +32,24 @@ int main() {
 
   }
   return 0;
+}
+
+int evaluate(ParseObject *object) {
+  if (strcmp(object->type, "NumericLiteral") == 0) {
+    return object->value;
+  }
+
+  int lhs = evaluate(object->lhs);
+  int rhs = evaluate(object->rhs);
+  if (strcmp(object->operator, "+") == 0) {
+    return lhs + rhs;
+  } else if (strcmp(object->operator, "-") == 0) {
+    return lhs - rhs;
+  } else if (strcmp(object->operator, "*") == 0) {
+    return lhs * rhs;
+  } else if (strcmp(object->operator, "/") == 0) {
+    return lhs / rhs;
+  } else {
+    return -1;
+  }
 }
