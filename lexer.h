@@ -1,4 +1,4 @@
-
+#include <stdbool.h>
 // char *INTEGER = "INTEGER";
 // char *PLUS = "PLUS";
 // char *MINUS = "MINUS";
@@ -7,7 +7,8 @@
 // char *LPAREN = "LPAREN";
 // char *RPAREN = "RPAREN";
 
-typedef struct Token {
+typedef struct Token
+{
   char *type;
   char *value;
 } Token;
