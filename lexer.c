@@ -14,6 +14,11 @@ bool is_numeric(char c) {
   return char_code >= 48 & char_code <= 57;
 }
 
+bool is_alpha(char c) {
+  int char_code = (int)c;
+  return char_code >= 97 & char_code <= 122;
+}
+
 Token *create_token(char *type, char *value) {
   Token *token = malloc(sizeof(token));
   token->type = type;
@@ -99,7 +104,6 @@ Token **lexer(char *stream, int stream_length, int *size) {
             c = stream[cursor];
             str_num = realloc(str_num, buffer_idx* sizeof(char));
           }
-
           {
             Token* t = create_token("NUMBER", str_num);
             num_tokens++;
@@ -107,7 +111,60 @@ Token **lexer(char *stream, int stream_length, int *size) {
             tokens[num_tokens - 1] = t;
           }
           cursor--;
-        }      
+        } else if (is_alpha(c) && c == 's') {
+          char *trig_op = malloc(sizeof(char));
+          int buffer_idx = 0;
+          while (is_alpha(c) && cursor < stream_length) {
+            trig_op[buffer_idx] = c;
+            cursor++;
+            buffer_idx++;
+            c = stream[cursor];
+            trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
+          }
+          {
+            Token* t = create_token("SIN", trig_op);
+            num_tokens++;
+            tokens = realloc(tokens, num_tokens * sizeof(Token *));
+            tokens[num_tokens - 1] = t;            
+          }
+          cursor--;
+        } else if (is_alpha(c) && c == 'c') {
+          char *trig_op = malloc(sizeof(char));
+          int buffer_idx = 0;
+          while (is_alpha(c) && cursor < stream_length) {
+            trig_op[buffer_idx] = c;
+            cursor++;
+            buffer_idx++;
+            c = stream[cursor];
+            trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
+          }
+          {
+            Token* t = create_token("COS", trig_op);
+            num_tokens++;
+            tokens = realloc(tokens, num_tokens * sizeof(Token *));
+            tokens[num_tokens - 1] = t;            
+          }
+          cursor--;
+        } else if (is_alpha(c) && c == 't') {
+          char *trig_op = malloc(sizeof(char));
+          int buffer_idx = 0;
+          while (is_alpha(c) && cursor < stream_length) {
+            trig_op[buffer_idx] = c;
+            cursor++;
+            buffer_idx++;
+            c = stream[cursor];
+            trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
+          }
+          {
+            Token* t = create_token("TAN", trig_op);
+            num_tokens++;
+            tokens = realloc(tokens, num_tokens * sizeof(Token *));
+            tokens[num_tokens - 1] = t;            
+          }
+          cursor--;
+        }
+
+
     }
     cursor++;
   }
