@@ -6,6 +6,7 @@ typedef struct ParseObject {
   char *operator;
   struct ParseObject *lhs;
   struct ParseObject *rhs;
+  struct ParseObject *expr;
 } ParseObject;
 
 ParseObject *create_parsed_object(Token *token);

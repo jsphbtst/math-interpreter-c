@@ -4,6 +4,14 @@
 #include <math.h>
 #include "parser.h"
 
+ParseObject *create_trigop_expression(ParseObject *expr, char *operator) {
+  ParseObject *trig_expr = malloc(sizeof(ParseObject));
+  trig_expr->expr = expr;
+  trig_expr->operator = operator;
+  trig_expr->type = "TrigOp";
+  return trig_expr;
+}
+
 ParseObject *create_parsed_numeric_literal(double value, char *type) {
   ParseObject *p = malloc(sizeof(ParseObject));
   p->value = value;
@@ -45,28 +53,22 @@ ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
  if (strcmp(current_token->type, "SIN") == 0) {
     eat_token(tokens, cursor, "SIN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    double value = sin(expr->value);
-    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
-    free(expr);
-    return literal;
+    ParseObject *trig_expr = create_trigop_expression(expr, "sin");
+    return trig_expr;
  }
 
  if (strcmp(current_token->type, "COS") == 0) {
     eat_token(tokens, cursor, "COS");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    double value = cos(expr->value);
-    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
-    free(expr);
-    return literal;
+    ParseObject *trig_expr = create_trigop_expression(expr, "cos");
+    return trig_expr;
  } 
 
  if (strcmp(current_token->type, "TAN") == 0) {
     eat_token(tokens, cursor, "TAN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    double value = tan(expr->value);
-    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
-    free(expr);
-    return literal;
+    ParseObject *trig_expr = create_trigop_expression(expr, "tan");
+    return trig_expr;
  } 
 
   printf("SyntaxError: Expected parenthesis or integer input but instead received %s\n", current_token->value);
@@ -152,6 +154,11 @@ void destroy_ast(ParseObject *ast) {
     free(ast);
     return;
   }
+
+  if (strcmp(ast->type, "TrigOp") == 0) {
+    free(ast->expr);
+    return;
+  }  
 
   destroy_ast(ast->lhs);
   destroy_ast(ast->rhs);
