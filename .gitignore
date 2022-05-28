@@ -1,2 +1,5 @@
 main
 .vscode
+main.o
+parser.o
+lexer.o
