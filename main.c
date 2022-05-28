@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <math.h>
 #include "parser/parser.h"
 
 #define BUFFER_SIZE 4096
@@ -39,6 +40,19 @@ int main() {
 double evaluate(ParseObject *ast) {
   if (strcmp(ast->type, "NumericLiteral") == 0) {
     return ast->value;
+  }
+
+  if (strcmp(ast->type, "TrigOp") == 0) {
+    double expression_value = evaluate(ast->expr);
+    if (strcmp(ast->operator, "sin") == 0) {
+      return sin(expression_value);
+    } else if (strcmp(ast->operator, "cos") == 0) {
+      return cos(expression_value);
+    } else if (strcmp(ast->operator, "tan") == 0) {
+      return tan(expression_value);
+    } else {
+      return sin(expression_value);
+    }
   }
 
   double lhs = evaluate(ast->lhs);
