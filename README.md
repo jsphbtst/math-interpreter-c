@@ -15,4 +15,4 @@ Two ways to exit the REPL:
 1. type `exit`; or
 2. hit `ctrl + z` or `cmd + .`
 
-![](math.gif)
+![](assets/math.gif)
