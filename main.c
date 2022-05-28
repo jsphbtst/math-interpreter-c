@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include "parser.h"
+#include "parser/parser.h"
 
 #define BUFFER_SIZE 4096
 

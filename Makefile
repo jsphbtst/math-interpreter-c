@@ -6,11 +6,11 @@ output: lexer.o parser.o main.o
 main.o: main.c
 	$(CC) main.c -c -o main.o
 
-parser.o: parser.c parser.h
-	$(CC) parser.c -c -o parser.o
+parser.o: parser/parser.c parser/parser.h
+	$(CC) parser/parser.c -c -o parser.o
 
-lexer.o: lexer.c lexer.h
-	$(CC) lexer.c -c -o lexer.o
+lexer.o: lexer/lexer.c lexer/lexer.h
+	$(CC) lexer/lexer.c -c -o lexer.o
 
 clean:
 	rm -rf *.o
