@@ -6,6 +6,7 @@ typedef struct Token {
 } Token;
 
 bool is_numeric(char c);
+bool is_alpha(char c);
 Token **lexer(char *stream, int stream_length, int *size);
 Token *create_token(char *type, char *value);
 void destroy_token(Token *token);

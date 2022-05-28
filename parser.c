@@ -1,12 +1,19 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #include "parser.h"
 
-ParseObject* create_parsed_object(Token *token) {
+ParseObject *create_parsed_numeric_literal(double value, char *type) {
   ParseObject *p = malloc(sizeof(ParseObject));
-  p->value = atof(token->value);
-  p->type = "NumericLiteral";
+  p->value = value;
+  p->type = type;
+  return p;
+}
+
+ParseObject* create_parsed_object(Token *token) {
+  double value = atof(token->value);
+  ParseObject *p = create_parsed_numeric_literal(value, "NumericLiteral");
   return p;
 }
 
@@ -34,6 +41,33 @@ ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
     eat_token(tokens, cursor, "RPAREN");
     return expr;
   }
+
+ if (strcmp(current_token->type, "SIN") == 0) {
+    eat_token(tokens, cursor, "SIN");
+    ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
+    double value = sin(expr->value);
+    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
+    free(expr);
+    return literal;
+ }
+
+ if (strcmp(current_token->type, "COS") == 0) {
+    eat_token(tokens, cursor, "COS");
+    ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
+    double value = cos(expr->value);
+    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
+    free(expr);
+    return literal;
+ } 
+
+ if (strcmp(current_token->type, "TAN") == 0) {
+    eat_token(tokens, cursor, "TAN");
+    ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
+    double value = tan(expr->value);
+    ParseObject *literal = create_parsed_numeric_literal(value, "NumericLiteral");
+    free(expr);
+    return literal;
+ } 
 
   printf("SyntaxError: Expected parenthesis or integer input but instead received %s\n", current_token->value);
   exit(0);
