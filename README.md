@@ -16,3 +16,24 @@ Two ways to exit the REPL:
 2. hit `ctrl + z` or `cmd + .`
 
 ![](assets/math.png)
+
+Grammar Rules:
+
+```
+<expr> ::= <expr> + <term> |
+           <expr> - <term> |
+           <term>
+
+<term> ::= <term> * <factor> |
+           <term> / <factor> |
+           <factor>
+
+<factor> ::= (<expr>) |
+             <trigOp>(<expr>) |
+             <expOp>(<expr>) |
+             number
+
+<trigOp> ::= sin | cos | tan
+
+<expOp> ::= exp | log | ln
+```
