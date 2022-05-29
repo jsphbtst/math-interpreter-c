@@ -19,6 +19,17 @@ bool is_alpha(char c) {
   return char_code >= 97 & char_code <= 122;
 }
 
+bool is_sin(char *op) {
+  return strcmp(op, "sin") == 0 | strcmp(op, "SIN") == 0;
+}
+
+bool is_cos(char *op) {
+  return strcmp(op, "cos") == 0 | strcmp(op, "COS") == 0;
+}
+bool is_tan(char *op) {
+  return strcmp(op, "tan") == 0 | strcmp(op, "TAN") == 0;
+}
+
 Token *create_token(char *type, char *value) {
   Token *token = malloc(sizeof(token));
   token->type = type;
@@ -123,11 +134,11 @@ Token **lexer(char *stream, int stream_length, int *size) {
           }
           {
             Token *t = NULL;
-            if (strcmp(trig_op, "sin") == 0) {
+            if (is_sin(trig_op)) {
               t = create_token("SIN", trig_op);
-            } else if (strcmp(trig_op, "cos") == 0) {
+            } else if (is_cos(trig_op)) {
               t = create_token("COS", trig_op);
-            } else if (strcmp(trig_op, "tan") == 0) {
+            } else if (is_tan(trig_op)) {
               t = create_token("TAN", trig_op);
             } else {
               // default just in case

@@ -50,21 +50,21 @@ ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
     return expr;
   }
 
- if (strcmp(current_token->type, "SIN") == 0) {
+ if (is_sin(current_token->type)) {
     eat_token(tokens, cursor, "SIN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
     ParseObject *trig_expr = create_trigop_expression(expr, "sin");
     return trig_expr;
  }
 
- if (strcmp(current_token->type, "COS") == 0) {
+ if (is_cos(current_token->type)) {
     eat_token(tokens, cursor, "COS");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
     ParseObject *trig_expr = create_trigop_expression(expr, "cos");
     return trig_expr;
  } 
 
- if (strcmp(current_token->type, "TAN") == 0) {
+ if (is_tan(current_token->type)) {
     eat_token(tokens, cursor, "TAN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
     ParseObject *trig_expr = create_trigop_expression(expr, "tan");
