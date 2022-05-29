@@ -111,7 +111,7 @@ Token **lexer(char *stream, int stream_length, int *size) {
             tokens[num_tokens - 1] = t;
           }
           cursor--;
-        } else if (is_alpha(c) && c == 's') {
+        } else if (is_alpha(c)) {
           char *trig_op = malloc(sizeof(char));
           int buffer_idx = 0;
           while (is_alpha(c) && cursor < stream_length) {
@@ -122,53 +122,26 @@ Token **lexer(char *stream, int stream_length, int *size) {
             trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
           }
           {
-            Token* t = create_token("SIN", trig_op);
-            num_tokens++;
-            tokens = realloc(tokens, num_tokens * sizeof(Token *));
-            tokens[num_tokens - 1] = t;            
-          }
-          cursor--;
-        } else if (is_alpha(c) && c == 'c') {
-          char *trig_op = malloc(sizeof(char));
-          int buffer_idx = 0;
-          while (is_alpha(c) && cursor < stream_length) {
-            trig_op[buffer_idx] = c;
-            cursor++;
-            buffer_idx++;
-            c = stream[cursor];
-            trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
-          }
-          {
-            Token* t = create_token("COS", trig_op);
-            num_tokens++;
-            tokens = realloc(tokens, num_tokens * sizeof(Token *));
-            tokens[num_tokens - 1] = t;            
-          }
-          cursor--;
-        } else if (is_alpha(c) && c == 't') {
-          char *trig_op = malloc(sizeof(char));
-          int buffer_idx = 0;
-          while (is_alpha(c) && cursor < stream_length) {
-            trig_op[buffer_idx] = c;
-            cursor++;
-            buffer_idx++;
-            c = stream[cursor];
-            trig_op = realloc(trig_op, buffer_idx* sizeof(char));            
-          }
-          {
-            Token* t = create_token("TAN", trig_op);
+            Token *t = NULL;
+            if (strcmp(trig_op, "sin") == 0) {
+              t = create_token("SIN", trig_op);
+            } else if (strcmp(trig_op, "cos") == 0) {
+              t = create_token("COS", trig_op);
+            } else if (strcmp(trig_op, "tan") == 0) {
+              t = create_token("TAN", trig_op);
+            } else {
+              // default just in case
+              t = create_token("SIN", trig_op);
+            }
             num_tokens++;
             tokens = realloc(tokens, num_tokens * sizeof(Token *));
             tokens[num_tokens - 1] = t;            
           }
           cursor--;
         }
-
-
     }
     cursor++;
   }
-
   *size = num_tokens;
   return tokens;
 }
