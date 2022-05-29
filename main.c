@@ -44,11 +44,11 @@ double evaluate(ParseObject *ast) {
 
   if (strcmp(ast->type, "TrigOp") == 0) {
     double expression_value = evaluate(ast->expr);
-    if (strcmp(ast->operator, "sin") == 0) {
+    if (is_sin(ast->operator)) {
       return sin(expression_value);
-    } else if (strcmp(ast->operator, "cos") == 0) {
+    } else if (is_cos(ast->operator)) {
       return cos(expression_value);
-    } else if (strcmp(ast->operator, "tan") == 0) {
+    } else if (is_tan(ast->operator)) {
       return tan(expression_value);
     } else {
       return sin(expression_value);
