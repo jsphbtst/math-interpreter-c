@@ -26,8 +26,17 @@ bool is_sin(char *op) {
 bool is_cos(char *op) {
   return strcmp(op, "cos") == 0 | strcmp(op, "COS") == 0;
 }
+
 bool is_tan(char *op) {
   return strcmp(op, "tan") == 0 | strcmp(op, "TAN") == 0;
+}
+
+bool is_exp(char *op) {
+  return strcmp(op, "exp") == 0 | strcmp(op, "EXP") == 0;
+}
+
+bool is_log(char *op) {
+  return strcmp(op, "log") == 0 | strcmp(op, "LOG") == 0 | strcmp(op, "ln") == 0 | strcmp(op, "LN") == 0;
 }
 
 Token *create_token(char *type, char *value) {
@@ -140,6 +149,10 @@ Token **lexer(char *stream, int stream_length, int *size) {
               t = create_token("COS", trig_op);
             } else if (is_tan(trig_op)) {
               t = create_token("TAN", trig_op);
+            } else if (is_exp(trig_op)) {
+              t = create_token("EXP", trig_op);
+            } else if (is_log(trig_op)) {
+              t = create_token("LOG", trig_op);
             } else {
               // default just in case
               t = create_token("SIN", trig_op);
