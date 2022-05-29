@@ -55,6 +55,17 @@ double evaluate(ParseObject *ast) {
     }
   }
 
+  if (strcmp(ast->type, "ExpOp") == 0) {
+    double expression_value = evaluate(ast->expr);
+    if (strcmp(ast->operator, "exp") == 0) {
+      return exp(expression_value);
+    } else if ((strcmp(ast->operator, "ln") == 0) | (strcmp(ast->operator, "log") == 0)) {
+      return log(expression_value);
+    } else {
+      return exp(expression_value);
+    }
+  }
+
   double lhs = evaluate(ast->lhs);
   double rhs = evaluate(ast->rhs);
   if (strcmp(ast->operator, "+") == 0) {

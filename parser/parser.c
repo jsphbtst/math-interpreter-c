@@ -4,13 +4,14 @@
 #include <math.h>
 #include "parser.h"
 
-ParseObject *create_trigop_expression(ParseObject *expr, char *operator) {
+ParseObject *create_math_expression(ParseObject *expr, char *operator, char *type) {
   ParseObject *trig_expr = malloc(sizeof(ParseObject));
   trig_expr->expr = expr;
   trig_expr->operator = operator;
-  trig_expr->type = "TrigOp";
+  trig_expr->type = type;
   return trig_expr;
 }
+
 
 ParseObject *create_parsed_numeric_literal(double value, char *type) {
   ParseObject *p = malloc(sizeof(ParseObject));
@@ -53,23 +54,37 @@ ParseObject* parse_factor(Token **tokens, int num_tokens, int *cursor) {
  if (is_sin(current_token->type)) {
     eat_token(tokens, cursor, "SIN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    ParseObject *trig_expr = create_trigop_expression(expr, "sin");
+    ParseObject *trig_expr = create_math_expression(expr, "sin", "TrigOp");
     return trig_expr;
  }
 
  if (is_cos(current_token->type)) {
     eat_token(tokens, cursor, "COS");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    ParseObject *trig_expr = create_trigop_expression(expr, "cos");
+    ParseObject *trig_expr = create_math_expression(expr, "cos", "TrigOp");
     return trig_expr;
  } 
 
  if (is_tan(current_token->type)) {
     eat_token(tokens, cursor, "TAN");
     ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
-    ParseObject *trig_expr = create_trigop_expression(expr, "tan");
+    ParseObject *trig_expr = create_math_expression(expr, "tan", "TrigOp");
     return trig_expr;
  } 
+
+ if (is_exp(current_token->type)) {
+    eat_token(tokens, cursor, "EXP");
+    ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
+    ParseObject *exp_expr = create_math_expression(expr, "exp", "ExpOp");
+    return exp_expr;
+ } 
+
+ if (is_log(current_token->type)) {
+    eat_token(tokens, cursor, "LOG");
+    ParseObject *expr = parse_factor(tokens, num_tokens, cursor);
+    ParseObject *exp_expr = create_math_expression(expr, "log", "ExpOp");
+    return exp_expr;
+ }  
 
   printf("SyntaxError: Expected parenthesis or integer input but instead received %s\n", current_token->value);
   exit(0);
@@ -155,7 +170,7 @@ void destroy_ast(ParseObject *ast) {
     return;
   }
 
-  if (strcmp(ast->type, "TrigOp") == 0) {
+  if ((strcmp(ast->type, "TrigOp") == 0) | (strcmp(ast->type, "ExpOp") == 0)) {
     free(ast->expr);
     return;
   }  
